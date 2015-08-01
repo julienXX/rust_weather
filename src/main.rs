@@ -14,8 +14,7 @@ const API_URL: &'static str = "http://api.openweathermap.org/data/2.5/weather?q=
 fn main() {
     match env::args().nth(1) {
         Some(city) => {
-            let region = city.clone();
-            let weather = get_weather(city);
+            let (weather, region) = get_weather(city);
             println!("Current weather in {} is {}.", region, weather);
         }
         None => {
@@ -25,7 +24,7 @@ fn main() {
     };
 }
 
-fn get_weather(city: String) -> String {
+fn get_weather(city: String) -> (String, String) {
     let url = API_URL.to_string() + &city;
     let client = Client::new();
 
@@ -40,8 +39,8 @@ fn get_weather(city: String) -> String {
     let json_object = json_body.as_object().unwrap();
     let weather = json_object.get("weather").unwrap();
 
-    weather[0]
+    (weather[0]
         .as_object().unwrap()
         .get("description").unwrap()
-        .to_string()
+        .to_string(), city)
 }
