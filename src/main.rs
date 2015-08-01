@@ -9,6 +9,8 @@ use hyper::header::Connection;
 
 use rustc_serialize::json::{Json};
 
+const API_URL: &'static str = "http://api.openweathermap.org/data/2.5/weather?q=";
+
 fn main() {
     match env::args().nth(1) {
         Some(city) => get_weather(city),
@@ -20,9 +22,7 @@ fn main() {
 }
 
 fn get_weather(city: String) {
-    let base_url = "http://api.openweathermap.org/data/2.5/weather?q=".to_string();
-    let url = base_url + &city;
-
+    let url = API_URL.to_string() + &city;
     let client = Client::new();
 
     let mut res = client.get(&*url)
