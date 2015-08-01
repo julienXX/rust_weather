@@ -36,8 +36,7 @@ fn get_weather(city: String) {
     let json_object = json_body.as_object().unwrap();
     let weather = json_object.get("weather").unwrap();
 
-    println!("{:?}",
-             weather[0]
+    println!("{}", weather[0]
              .as_object().unwrap()
              .get("description").unwrap()
              .as_string().unwrap());
