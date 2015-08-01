@@ -1,17 +1,31 @@
 extern crate hyper;
 extern crate rustc_serialize;
 
-use rustc_serialize::json::{Json};
-
 use std::io::Read;
+use std::env;
 
 use hyper::Client;
 use hyper::header::Connection;
 
+use rustc_serialize::json::{Json};
+
 fn main() {
+    match env::args().nth(1) {
+        Some(city) => get_weather(city),
+        None => {
+            println!("Usage: weather <city>");
+            return;
+        }
+    };
+}
+
+fn get_weather(city: String) {
+    let base_url = "http://api.openweathermap.org/data/2.5/weather?q=".to_string();
+    let url = base_url + &city;
+
     let client = Client::new();
 
-    let mut res = client.get("http://api.openweathermap.org/data/2.5/weather?q=Paris, France")
+    let mut res = client.get(&*url)
         .header(Connection::close())
         .send().unwrap();
 
